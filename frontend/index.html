@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>কৃষি সহকারী — Smart Agriculture Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<style>
+  :root {
+    --green-50: #f0faf4;
+    --green-100: #d4f0e0;
+    --green-200: #a8dfbf;
+    --green-400: #4caf7d;
+    --green-500: #2d8653;
+    --green-600: #1e6b3f;
+    --green-700: #154f2e;
+    --green-800: #0d3320;
+    --amber-50: #fffbeb;
+    --amber-100: #fef3c7;
+    --amber-400: #f59e0b;
+    --amber-500: #d97706;
+    --teal-400: #14b8a6;
+    --teal-600: #0d9488;
+    --red-400: #f87171;
+    --red-600: #dc2626;
+    --bg: #0a1a0f;
+    --bg2: #0f2218;
+    --bg3: #152d1e;
+    --bg4: #1a3828;
+    --surface: #1e4030;
+    --surface2: #244838;
+    --border: rgba(76,175,125,0.15);
+    --border2: rgba(76,175,125,0.25);
+    --text: #e8f5ee;
+    --text2: #9dccb2;
+    --text3: #6aaa88;
+    --accent: #4caf7d;
+    --accent2: #2d8653;
+    --gold: #f59e0b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hind Siliguri', 'Sora', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(45,134,83,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(20,184,166,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(76,175,125,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grid lines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(76,175,125,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(76,175,125,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px;
+    background: rgba(10,26,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--green-500), var(--teal-400));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .logo-text span:first-child {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .logo-text span:last-child {
+    font-size: 11px;
+    color: var(--text3);
+    font-weight: 400;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .lang-toggle {
+    display: flex;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .lang-btn {
+    padding: 4px 14px;
+    border-radius: 16px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text3);
+    background: transparent;
+  }
+
+  .lang-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(76,175,125,0.1);
+    border: 1px solid rgba(76,175,125,0.2);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'Sora', sans-serif;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 64px 2rem 48px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--amber-400);
+    font-family: 'Sora', sans-serif;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e8f5ee 30%, var(--accent) 70%, var(--teal-400) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 16px;
+    color: var(--text2);
+    line-height: 1.7;
+    font-family: 'Sora', sans-serif;
+    font-weight: 300;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  @media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── PANELS ── */
+  .panel {
+    background: rgba(30,64,48,0.4);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s;
+  }
+
+  .panel:hover { border-color: var(--border2); }
+
+  .panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .panel-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .panel-icon.green { background: rgba(76,175,125,0.15); }
+  .panel-icon.amber { background: rgba(245,158,11,0.15); }
+  .panel-icon.teal { background: rgba(20,184,166,0.15); }
+
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    letter-spacing: 0.3px;
+  }
+
+  .panel-body { padding: 20px; }
+
+  /* ── UPLOAD ZONE ── */
+  .upload-zone {
+    border: 2px dashed var(--border2);
+    border-radius: 14px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    background: rgba(15,34,24,0.5);
+    margin-bottom: 16px;
+  }
+
+  .upload-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(76,175,125,0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(76,175,125,0.05);
+  }
+
+  .upload-zone:hover::before, .upload-zone.drag-over::before { opacity: 1; }
+
+  .upload-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, rgba(76,175,125,0.2), rgba(20,184,166,0.1));
+    border-radius: 16px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border: 1px solid var(--border2);
+  }
+
+  .upload-zone p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .upload-zone .upload-hint {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 6px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  #fileInput { display: none; }
+
+  .image-preview {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+    display: none;
+  }
+
+  .image-preview img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preview-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: rgba(0,0,0,0.7);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  /* ── SELECTS / INPUTS ── */
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .field-label .required-star {
+    color: var(--red-400);
+    margin-left: 3px;
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  select, textarea, input[type="text"] {
+    width: 100%;
+    background: rgba(15,34,24,0.8);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  select {
+    padding: 10px 36px 10px 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236aaa88' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+  }
+
+  select:focus, textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(76,175,125,0.12);
+  }
+
+  /* Validation error state */
+  select.field-error,
+  textarea.field-error,
+  input[type="text"].field-error {
+    border-color: var(--red-400) !important;
+    box-shadow: 0 0 0 3px rgba(248,113,113,0.15) !important;
+    animation: shake 0.35s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+  }
+
+  .field-error-msg {
+    font-size: 11px;
+    color: var(--red-400);
+    font-family: 'Sora', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: -2px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  textarea {
+    padding: 12px;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+
+  /* ── ANALYZE BUTTON ── */
+  .analyze-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .analyze-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .analyze-btn:hover::before { left: 100%; }
+  .analyze-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(45,134,83,0.4); }
+  .analyze-btn:active { transform: translateY(0); }
+  .analyze-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RIGHT PANEL — RESULTS ── */
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── RESULT CARDS ── */
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  @media (max-width: 700px) {
+    .result-grid { grid-template-columns: 1fr; }
+  }
+
+  .result-card {
+    background: rgba(21,45,30,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--accent));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+
+  .result-card.has-data::before { transform: scaleX(1); }
+
+  .result-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .card-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+    background: var(--card-bg, rgba(76,175,125,0.1));
+  }
+
+  .card-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+    margin-bottom: 8px;
+  }
+
+  .card-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .card-value.placeholder {
+    color: var(--text3);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 8px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .severity-high { background: rgba(248,113,113,0.15); color: var(--red-400); border: 1px solid rgba(248,113,113,0.2); }
+  .severity-medium { background: rgba(245,158,11,0.15); color: var(--amber-400); border: 1px solid rgba(245,158,11,0.2); }
+  .severity-low { background: rgba(76,175,125,0.15); color: var(--accent); border: 1px solid rgba(76,175,125,0.2); }
+
+  .confidence-bar {
+    margin-top: 10px;
+    height: 4px;
+    background: rgba(76,175,125,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--teal-400));
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    width: 0%;
+  }
+
+  .confidence-label {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 5px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ── WEATHER WIDGET ── */
+  .weather-widget {
+    background: rgba(21,45,30,0.6);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .weather-icon-big {
+    font-size: 42px;
+    line-height: 1;
+  }
+
+  .weather-main .temp {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+  }
+
+  .weather-main .desc {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  .weather-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .weather-stat {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+    text-align: right;
+  }
+
+  .weather-stat strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .weather-advice-box {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(76,175,125,0.07);
+    border: 1px solid rgba(76,175,125,0.15);
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    grid-column: 1 / -1;
+  }
+
+  /* ── CHAT SECTION ── */
+  .chat-panel {
+    background: rgba(21,45,30,0.4);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  .chat-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-msg.user {
+    background: linear-gradient(135deg, var(--green-600), var(--green-700));
+    color: #e8f5ee;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .chat-msg.ai {
+    background: rgba(30,64,48,0.7);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .chat-msg.ai .ai-label {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 12px 14px;
+    background: rgba(30,64,48,0.7);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    display: none;
+  }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: typingBounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .chat-input-row {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    background: rgba(15,34,24,0.5);
+  }
+
+  .chat-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    background: rgba(15,34,24,0.8);
+  }
+
+  .chat-send-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--green-600);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .chat-send-btn:hover { background: var(--green-500); transform: scale(1.05); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text3);
+  }
+
+  .empty-state .empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.7;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-mini {
+    background: rgba(21,45,30,0.5);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .stat-mini .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Sora', sans-serif;
+    line-height: 1;
+  }
+
+  .stat-mini .lbl {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 12px 20px;
+    background: rgba(30,64,48,0.95);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--text);
+    backdrop-filter: blur(20px);
+    z-index: 999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    max-width: 320px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── LOADING OVERLAY ── */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,26,15,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    z-index: 10;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .loading-overlay.show { display: flex; }
+
+  .loading-ring {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .loading-text {
+    font-size: 14px;
+    color: var(--text2);
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* ── MODEL SELECTOR ── */
+  .model-selector-wrap {
+    border: 1px solid var(--border2);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    background: rgba(15,34,24,0.6);
+  }
+
+  .model-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .model-tab {
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Sora', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text3);
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .model-tab.active {
+    background: rgba(76,175,125,0.12);
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+  }
+
+  .model-tab:hover:not(.active) { background: rgba(76,175,125,0.05); color: var(--text2); }
+
+  .model-tab-content { padding: 12px; display: none; }
+  .model-tab-content.active { display: block; }
+
+  .model-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: 'Sora', sans-serif;
+    margin-top: 8px;
+    color: var(--text3);
+  }
+
+  .model-status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .model-status-dot.offline { background: var(--red-400); }
+  .model-status-dot.loading { background: var(--amber-400); animation: pulse 1s infinite; }
+
+  .cloud-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: rgba(245,158,11,0.12);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 10px;
+    font-size: 10px;
+    color: var(--amber-400);
+    font-family: 'Sora', sans-serif;
+    margin-left: 6px;
+    font-weight: 600;
+  }
+
+  .model-desc {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-family: 'Sora', sans-serif;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--surface2); }
+
+
+  /* ── MARKDOWN CONTENT ── */
+  .md-content { line-height: 1.7; }
+  .md-content p { margin-bottom: 8px; }
+  .md-content p:last-child { margin-bottom: 0; }
+  .md-content strong { color: var(--accent); font-weight: 600; }
+  .md-content em { color: var(--text2); font-style: italic; }
+  .md-content ul, .md-content ol {
+    padding-left: 18px;
+    margin: 6px 0;
+  }
+  .md-content li { margin-bottom: 4px; }
+  .md-content h1, .md-content h2, .md-content h3 {
+    color: var(--accent);
+    font-weight: 600;
+    margin: 10px 0 6px;
+    line-height: 1.3;
+  }
+  .md-content h1 { font-size: 16px; }
+  .md-content h2 { font-size: 15px; }
+  .md-content h3 { font-size: 14px; }
+  .md-content code {
+    background: rgba(76,175,125,0.15);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--teal-400);
+  }
+  .md-content pre {
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 8px 0;
+  }
+  .md-content pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .md-content hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 10px 0;
+  }
+  .md-content blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 10px;
+    color: var(--text2);
+    margin: 8px 0;
+  }
+  .md-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    font-size: 13px;
+  }
+  .md-content th, .md-content td {
+    padding: 6px 10px;
+    border: 1px solid var(--border2);
+    text-align: left;
+  }
+  .md-content th {
+    background: rgba(76,175,125,0.1);
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🌾</div>
+      <div class="logo-text">
+        <span data-t="appName">কৃষি সহকারী</span>
+        <span data-t="appSub">Smart Agriculture AI</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-pill" id="headerStatusPill">
+        <div class="status-dot" id="headerStatusDot"></div>
+        <span id="headerStatusText">সংযোগ যাচাই...</span>
+      </div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('bn')">বাংলা</button>
+        <button class="lang-btn" onclick="setLang('en')">English</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">🇧🇩 <span data-t="heroBadge">বাংলাদেশের কৃষকদের জন্য</span></div>
+    <h1 data-t="heroTitle">AI দিয়ে ফসলের রোগ সনাক্ত করুন</h1>
+    <p data-t="heroSub">ছবি তুলুন, আপলোড করুন — আমরা রোগ চিনব, সমাধান দেব, আবহাওয়া দেখব</p>
+  </div>
+
+  <!-- STATS -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 2rem 24px;">
+    <div class="stats-row">
+      <div class="stat-mini">
+        <div class="num">৩০+</div>
+        <div class="lbl" data-t="stat1">রোগের তথ্যভাণ্ডার</div>
+      </div>
+      <div class="stat-mini">
+        <div class="num">৬৪</div>
+        <div class="lbl" data-t="stat2">জেলার আবহাওয়া</div>
+      </div>
+      <div class="stat-mini">
+        <div class="num">২৪/৭</div>
+        <div class="lbl" data-t="stat3">AI সহকারী</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- LEFT: INPUT PANEL -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Upload Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-icon green">📸</div>
+          <span class="panel-title" data-t="uploadTitle">ফসলের ছবি আপলোড</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="image-preview" id="imagePreview">
+            <img id="previewImg" src="" alt="preview">
+            <button class="preview-remove" onclick="removeImage()">✕</button>
+          </div>
+
+          <div class="upload-zone" id="uploadZone"
+            onclick="document.getElementById('fileInput').click()"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleDrop(event)">
+            <div class="upload-icon">📷</div>
+            <p data-t="uploadInstr">ছবি টেনে আনুন বা ক্লিক করুন</p>
+            <p class="upload-hint" data-t="uploadHint">JPG, PNG সমর্থিত • সর্বোচ্চ ১০MB</p>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" onchange="handleFile(event)">
+
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-icon amber">⚙️</div>
+          <span class="panel-title" data-t="settingsTitle">তথ্য দিন</span>
+        </div>
+        <div class="panel-body">
+
+          <!-- AI Model Selector -->
+          <div class="field-group">
+            <label class="field-label" data-t="modelLabel">AI মডেল বেছে নিন</label>
+            <div class="model-selector-wrap">
+              <!-- Tabs — 3 options -->
+              <div class="model-tabs" style="grid-template-columns:1fr 1fr;">
+                <button class="model-tab active" id="tabOllama" onclick="switchModelTab('ollama')">
+                  🖥️ <span data-t="ollamaTab">লোকাল</span>
+                </button>
+                <button class="model-tab" id="tabOllamaCloud" onclick="switchModelTab('ollama_cloud')">
+                  🦙 <span data-t="ollamaCloudTab">Ollama Cloud</span>
+                  <span class="cloud-badge">KEY</span>
+                </button>
+              </div>
+
+              <!-- Ollama Panel -->
+              <div class="model-tab-content active" id="panelOllama">
+                <select id="ollamaModelSelect" onchange="onModelChange()">
+                  <option value="" data-t="loadingModels">মডেল লোড হচ্ছে...</option>
+                </select>
+                <div class="model-status">
+                  <div class="model-status-dot loading" id="ollamaStatusDot"></div>
+                  <span id="ollamaStatusText" data-t="ollamaChecking">Ollama সংযোগ যাচাই করা হচ্ছে...</span>
+                </div>
+              </div>
+
+              <!-- Ollama Cloud Panel -->
+              <div class="model-tab-content" id="panelOllamaCloud">
+                <select id="ollamaCloudModelSelect" onchange="onModelChange()">
+                  <option value="llama3.3">Llama 3.3 — Meta • শক্তিশালী</option>
+                  <option value="llama3.1:8b">Llama 3.1 8B — Meta • দ্রুত</option>
+                  <option value="llama3.1:70b">Llama 3.1 70B — Meta • বড়</option>
+                  <option value="qwen3:8b">Qwen 3 8B — Alibaba • দ্রুত</option>
+                  <option value="qwen3:32b">Qwen 3 32B — Alibaba • শক্তিশালী</option>
+                  <option value="gemma3:12b">Gemma 3 12B — Google</option>
+                  <option value="mistral:7b">Mistral 7B — দ্রুত</option>
+                  <option value="deepseek-r1:8b">DeepSeek R1 8B — Reasoning</option>
+                </select>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" data-t="districtLabel">জেলা</label>
+            <select id="districtSelect">
+              <option value="" data-t="districtPlaceholder">জেলা বেছে নিন...</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group" style="margin-bottom:0">
+              <label class="field-label" data-t="cropLabel">ফসল<span class="required-star">*</span></label>
+              <select id="cropSelect" onchange="handleCropSelect(this)">
+                <option value="" data-t="cropPlaceholder">বেছে নিন</option>
+                <option value="__custom__">অন্য ফসল লিখুন...</option>
+              </select>
+              <input type="text" id="cropCustomInput"
+                placeholder="ফসলের নাম লিখুন"
+                style="display:none; margin-top:6px; width:100%; padding:10px 14px; background:var(--bg3); border:1px solid var(--border2); border-radius:10px; color:var(--text); font-family:inherit; font-size:14px;"
+                oninput="syncCustomCrop(this.value)"
+              >
+              <span class="field-error-msg" id="cropError" style="display:none">⚠️ <span data-t="cropRequired">ফসল সিলেক্ট করুন</span></span>
+            </div>
+            <div class="field-group" style="margin-bottom:0">
+              <label class="field-label" data-t="seasonLabel">মৌসুম</label>
+              <select id="seasonSelect">
+                <option value="" data-t="seasonPlaceholder">বেছে নিন</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-top:14px">
+            <label class="field-label" data-t="questionLabel">সমস্যার বিবরণ<span class="required-star">*</span></label>
+            <textarea id="questionInput" data-t-placeholder="questionPlaceholder"></textarea>
+            <span class="field-error-msg" id="questionError" style="display:none">⚠️ <span data-t="questionRequired">প্রশ্ন লেখা আবশ্যক</span></span>
+          </div>
+
+          <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
+            <div class="btn-spinner" id="btnSpinner"></div>
+            <span id="btnText">🔍 <span data-t="analyzeBtn">বিশ্লেষণ করুন</span></span>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: OUTPUT -->
+    <div class="right-panel">
+
+      <!-- Result Cards -->
+      <div class="panel" style="position:relative;" id="resultsPanel">
+        <div class="panel-header">
+          <div class="panel-icon green">📊</div>
+          <span class="panel-title" data-t="resultsTitle">বিশ্লেষণের ফলাফল</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="loading-overlay" id="resultsLoading">
+            <div class="loading-ring"></div>
+            <div class="loading-text" data-t="loadingText">বিশ্লেষণ চলছে...</div>
+          </div>
+
+          <!-- Empty state -->
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">🌱</div>
+            <p data-t="emptyState">বাম দিকে ছবি আপলোড করুন এবং বিশ্লেষণ করুন বাটনে চাপুন</p>
+          </div>
+
+          <!-- Result content (hidden until data) -->
+          <div id="resultContent" style="display:none;">
+            <div class="result-grid">
+
+              <!-- Disease Card -->
+              <div class="result-card" id="diseaseCard" style="--card-accent:#f87171;--card-bg:rgba(248,113,113,0.1)">
+                <div class="card-icon-wrap">🦠</div>
+                <div class="card-label" data-t="diseaseLabel">রোগ সনাক্তকরণ</div>
+                <div class="card-value" id="diseaseName">—</div>
+                <div id="severityBadge" style="margin-top:8px;"></div>
+                <div class="confidence-bar">
+                  <div class="confidence-fill" id="confFill"></div>
+                </div>
+                <div class="confidence-label" id="confLabel"></div>
+              </div>
+
+              <!-- Treatment Card -->
+              <div class="result-card" id="treatmentCard" style="--card-accent:#f59e0b;--card-bg:rgba(245,158,11,0.1)">
+                <div class="card-icon-wrap">💊</div>
+                <div class="card-label" data-t="treatmentLabel">চিকিৎসা পরামর্শ</div>
+                <div class="card-value" id="treatmentText" style="font-size:13px;font-weight:400;line-height:1.7;">—</div>
+              </div>
+
+              <!-- Fertilizer Card -->
+              <div class="result-card" id="fertCard" style="--card-accent:#4caf7d;--card-bg:rgba(76,175,125,0.1)">
+                <div class="card-icon-wrap">🌱</div>
+                <div class="card-label" data-t="fertLabel">সার সুপারিশ</div>
+                <div class="card-value" id="fertText" style="font-size:13px;font-weight:400;line-height:1.7;">—</div>
+              </div>
+
+              <!-- Weather Card -->
+              <div class="result-card" id="weatherCard" style="--card-accent:#14b8a6;--card-bg:rgba(20,184,166,0.1)">
+                <div class="card-icon-wrap">🌤️</div>
+                <div class="card-label" data-t="weatherLabel">আবহাওয়া পরামর্শ</div>
+                <div class="card-value" id="weatherText" style="font-size:13px;font-weight:400;line-height:1.7;">—</div>
+              </div>
+
+            </div>
+
+            <!-- Full weather widget -->
+            <div class="weather-widget" id="weatherWidget" style="margin-top:16px;display:none;">
+              <div class="weather-icon-big" id="wIcon">☀️</div>
+              <div class="weather-main">
+                <div class="temp" id="wTemp">—°C</div>
+                <div class="desc" id="wDesc">—</div>
+              </div>
+              <div class="weather-stats">
+                <div class="weather-stat"><strong id="wHumidity">—</strong>% <span data-t="humidity">আর্দ্রতা</span></div>
+                <div class="weather-stat"><strong id="wRain">—</strong>% <span data-t="rain">বৃষ্টি</span></div>
+              </div>
+              <div class="weather-advice-box" id="wAdvice">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Panel -->
+      <div class="chat-panel">
+        <div class="panel-header">
+          <div class="panel-icon teal">💬</div>
+          <span class="panel-title" data-t="chatTitle">AI কৃষি বিশেষজ্ঞের সাথে কথা বলুন</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg ai">
+            <div class="ai-label">কৃষি AI</div>
+            <span id="welcomeMsg" data-t="welcomeMsg">আস্সালামু আলাইকুম! আমি আপনার AI কৃষি সহকারী। ফসলের রোগ, সার, চাষাবাদ — যেকোনো প্রশ্ন করুন।</span>
+          </div>
+          <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" data-t-placeholder="chatPlaceholder"
+            onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-send-btn" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+// TRANSLATIONS
+// ─────────────────────────────────────────
+const T = {
+  bn: {
+    appName: "কৃষি সহকারী",
+    appSub: "Smart Agriculture AI",
+    statusText: "Ollama সক্রিয়",
+    heroBadge: "বাংলাদেশের কৃষকদের জন্য",
+    heroTitle: "AI দিয়ে ফসলের রোগ সনাক্ত করুন",
+    heroSub: "ছবি তুলুন, আপলোড করুন — আমরা রোগ চিনব, সমাধান দেব, আবহাওয়া দেখব",
+    stat1: "রোগের তথ্যভাণ্ডার",
+    stat2: "জেলার আবহাওয়া",
+    stat3: "AI সহকারী",
+    uploadTitle: "ফসলের ছবি আপলোড",
+    uploadInstr: "ছবি টেনে আনুন বা ক্লিক করুন",
+    uploadHint: "JPG, PNG সমর্থিত • সর্বোচ্চ ১০MB",
+    settingsTitle: "তথ্য দিন",
+    districtLabel: "জেলা",
+    districtPlaceholder: "জেলা বেছে নিন...",
+    cropLabel: "ফসল",
+    cropPlaceholder: "বেছে নিন",
+    cropRequired: "ফসল সিলেক্ট করা আবশ্যক",
+    seasonLabel: "মৌসুম",
+    seasonPlaceholder: "বেছে নিন",
+    questionLabel: "সমস্যার বিবরণ",
+    questionPlaceholder: "যেমন: পাতা হলুদ হয়ে যাচ্ছে, ধানের গোড়া পচে যাচ্ছে...",
+    questionRequired: "প্রশ্ন বা সমস্যার বিবরণ লেখা আবশ্যক",
+    analyzeBtn: "বিশ্লেষণ করুন",
+    resultsTitle: "বিশ্লেষণের ফলাফল",
+    loadingText: "বিশ্লেষণ চলছে...",
+    emptyState: "বাম দিকে ছবি আপলোড করুন এবং বিশ্লেষণ করুন বাটনে চাপুন",
+    diseaseLabel: "রোগ সনাক্তকরণ",
+    treatmentLabel: "চিকিৎসা পরামর্শ",
+    fertLabel: "সার সুপারিশ",
+    weatherLabel: "আবহাওয়া পরামর্শ",
+    chatTitle: "AI কৃষি বিশেষজ্ঞের সাথে কথা বলুন",
+    chatPlaceholder: "প্রশ্ন করুন... যেমন: ধানে কখন ইউরিয়া দেব?",
+    welcomeMsg: "আস্সালামু আলাইকুম! আমি আপনার AI কৃষি সহকারী। ফসলের রোগ, সার, চাষাবাদ — যেকোনো প্রশ্ন করুন।",
+    humidity: "আর্দ্রতা",
+    rain: "বৃষ্টি",
+    crops: ["ধান","গম","পাট","ভুট্টা","সরিষা","আলু","টমেটো","বেগুন","পেঁয়াজ","রসুন","মরিচ","শিম","লাউ","কুমড়া","বাঁধাকপি"],
+    seasons: ["বোরো","আমন","আউশ","রবি","খরিফ"],
+    districts: ["ঢাকা","চট্টগ্রাম","রাজশাহী","খুলনা","বরিশাল","সিলেট","ময়মনসিংহ","রংপুর","কুমিল্লা","গাজীপুর","নারায়ণগঞ্জ","টাঙ্গাইল","নরসিংদী","মানিকগঞ্জ","মুন্সিগঞ্জ","ফরিদপুর","মাদারীপুর","গোপালগঞ্জ","শরীয়তপুর","রাজবাড়ী","ব্রাহ্মণবাড়িয়া","চাঁদপুর","লক্ষ্মীপুর","ফেনী","নোয়াখালী","চাঁদপুর","কক্সবাজার","বান্দরবান","রাঙ্গামাটি","খাগড়াছড়ি","জামালপুর","শেরপুর","নেত্রকোণা","কিশোরগঞ্জ","ময়মনসিংহ","পাবনা","সিরাজগঞ্জ","নাটোর","নওগাঁ","চাঁপাইনবাবগঞ্জ","বগুড়া","জয়পুরহাট","গাইবান্ধা","দিনাজপুর","ঠাকুরগাঁও","পঞ্চগড়","নীলফামারী","লালমনিরহাট","কুড়িগ্রাম","যশোর","মাগুরা","নড়াইল","ঝিনাইদহ","মেহেরপুর","চুয়াডাঙ্গা","কুষ্টিয়া","সাতক্ষীরা","বাগেরহাট","পিরোজপুর","ঝালকাঠি","পটুয়াখালী","ভোলা","বরগুনা","হবিগঞ্জ","মৌলভীবাজার","সুনামগঞ্জ"],
+    modelLabel: "AI মডেল বেছে নিন",
+    ollamaTab: "লোকাল (Ollama)",
+    ollamaCloudTab: "Ollama Cloud",
+    loadingModels: "মডেল লোড হচ্ছে...",
+    ollamaChecking: "Ollama সংযোগ যাচাই করা হচ্ছে...",
+    ollamaOnline: "Ollama সংযুক্ত",
+    ollamaOffline: "Ollama বন্ধ — ollama serve চালান",
+    noOllamaModels: "কোনো মডেল নেই — ollama pull <model> চালান",
+    severityHigh: "গুরুতর",
+    severityMed: "মাঝারি",
+    severityLow: "হালকা",
+    confidence: "নিশ্চয়তা",
+    noImage: "ছবি না দিয়েও চলবে, তবে রোগ সনাক্তকরণ ভালো হবে ছবি দিলে।",
+    analyzing: "AI বিশ্লেষণ করছে...",
+  },
+  en: {
+    appName: "Krishi AI",
+    appSub: "Smart Agriculture Assistant",
+    statusText: "Ollama Active",
+    heroBadge: "For Farmers of Bangladesh",
+    heroTitle: "Detect Crop Diseases with AI",
+    heroSub: "Upload a photo — we'll identify the disease, suggest treatment, and check the weather",
+    stat1: "Disease Knowledge Base",
+    stat2: "Districts Covered",
+    stat3: "AI Assistant",
+    uploadTitle: "Upload Crop Image",
+    uploadInstr: "Drag & drop or click to browse",
+    uploadHint: "JPG, PNG supported • Max 10MB",
+    settingsTitle: "Enter Details",
+    districtLabel: "District",
+    districtPlaceholder: "Select district...",
+    cropLabel: "Crop",
+    cropPlaceholder: "Select",
+    cropRequired: "Please select a crop",
+    seasonLabel: "Season",
+    seasonPlaceholder: "Select",
+    questionLabel: "Describe the Problem",
+    questionPlaceholder: "e.g. Leaves turning yellow, stem rotting at base...",
+    questionRequired: "Please describe the problem or question",
+    analyzeBtn: "Analyze Now",
+    resultsTitle: "Analysis Results",
+    loadingText: "Analyzing...",
+    emptyState: "Upload a crop image on the left and click Analyze",
+    diseaseLabel: "Disease Detection",
+    treatmentLabel: "Treatment Advice",
+    fertLabel: "Fertilizer Recommendation",
+    weatherLabel: "Weather Advisory",
+    chatTitle: "Chat with AI Agriculture Expert",
+    chatPlaceholder: "Ask anything... e.g. When should I apply urea for rice?",
+    welcomeMsg: "Hello! I'm your AI agriculture assistant. Ask me about crop diseases, fertilizers, farming techniques — anything!",
+    humidity: "Humidity",
+    rain: "Rain",
+    crops: ["Rice","Wheat","Jute","Corn","Mustard","Potato","Tomato","Eggplant","Onion","Garlic","Chili","Bean","Gourd","Pumpkin","Cabbage"],
+    seasons: ["Boro","Amon","Aush","Rabi","Kharif"],
+    districts: ["Dhaka","Chattogram","Rajshahi","Khulna","Barishal","Sylhet","Mymensingh","Rangpur","Cumilla","Gazipur","Narayanganj","Tangail","Narsingdi","Manikganj","Munshiganj","Faridpur","Madaripur","Gopalganj","Shariatpur","Rajbari","Brahmanbaria","Chandpur","Lakshmipur","Feni","Noakhali","Cox's Bazar","Bandarban","Rangamati","Khagrachhari","Jamalpur","Sherpur","Netrokona","Kishoreganj","Pabna","Sirajganj","Natore","Naogaon","Chapai Nawabganj","Bogura","Joypurhat","Gaibandha","Dinajpur","Thakurgaon","Panchagarh","Nilphamari","Lalmonirhat","Kurigram","Jashore","Magura","Narail","Jhenaidah","Meherpur","Chuadanga","Kushtia","Satkhira","Bagerhat","Pirojpur","Jhalokati","Patuakhali","Bhola","Barguna","Habiganj","Moulvibazar","Sunamganj"],
+    modelLabel: "Select AI Model",
+    ollamaTab: "Local (Ollama)",
+    ollamaCloudTab: "Ollama Cloud",
+    loadingModels: "Loading models...",
+    ollamaChecking: "Checking Ollama connection...",
+    ollamaOnline: "Ollama connected",
+    ollamaOffline: "Ollama offline — run ollama serve",
+    noOllamaModels: "No models found — run ollama pull <model>",
+    severityHigh: "Severe",
+    severityMed: "Moderate",
+    severityLow: "Mild",
+    confidence: "Confidence",
+    noImage: "You can proceed without an image, but disease detection is better with one.",
+    analyzing: "AI is analyzing...",
+  }
+};
+
+let currentLang = localStorage.getItem('krishi_lang') || 'bn';
+let currentImage = null;
+let chatHistory = [];
+let activeModelProvider = localStorage.getItem('krishi_provider') || 'ollama';
+let activeModelName = localStorage.getItem('krishi_model') || '';
+
+// ─────────────────────────────────────────
+// MODEL SELECTOR
+// ─────────────────────────────────────────
+function switchModelTab(provider) {
+  activeModelProvider = provider;
+  localStorage.setItem('krishi_provider', provider);
+
+  document.querySelectorAll('.model-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.model-tab-content').forEach(p => p.classList.remove('active'));
+
+  const tabMap = { ollama: 'tabOllama', ollama_cloud: 'tabOllamaCloud' };
+  const panelMap = { ollama: 'panelOllama', ollama_cloud: 'panelOllamaCloud' };
+
+  document.getElementById(tabMap[provider])?.classList.add('active');
+  document.getElementById(panelMap[provider])?.classList.add('active');
+
+  onModelChange();
+}
+
+function onModelChange() {
+  if (activeModelProvider === 'ollama') {
+    activeModelName = document.getElementById('ollamaModelSelect').value;
+  } else if (activeModelProvider === 'ollama_cloud') {
+    activeModelName = document.getElementById('ollamaCloudModelSelect').value;
+  } else {
+    activeModelName = document.getElementById('ollamaModelSelect').value;
+  }
+  localStorage.setItem('krishi_model', activeModelName);
+  updateHeaderStatus();
+}
+
+function updateHeaderStatus() {
+  const dot  = document.getElementById('headerStatusDot');
+  const text = document.getElementById('headerStatusText');
+  if (!dot || !text) return;
+
+  if (activeModelProvider === 'ollama_cloud') {
+    dot.style.background = '#a78bfa';
+    const modelShort = activeModelName || 'ollama cloud';
+    text.textContent = `🦙 ${modelShort}`;
+  } else {
+    dot.style.background = '#4caf7d';
+    text.textContent = activeModelName
+      ? `🖥️ ${activeModelName}`
+      : (currentLang === 'bn' ? 'Ollama সক্রিয়' : 'Ollama Active');
+  }
+}
+
+async function loadModels() {
+  const dot = document.getElementById('ollamaStatusDot');
+  const txt = document.getElementById('ollamaStatusText');
+  const sel = document.getElementById('ollamaModelSelect');
+
+  try {
+    const res = await fetch('/models');
+    if (!res.ok) throw new Error('API unavailable');
+    const data = await res.json();
+
+    // Ollama local models
+    const ollamaModels = data.ollama_models || [];
+    sel.innerHTML = '';
+    if (ollamaModels.length === 0) {
+      sel.innerHTML = `<option value="">${t('noOllamaModels')}</option>`;
+      dot.className = 'model-status-dot offline';
+      txt.textContent = t('ollamaOffline');
+    } else {
+      ollamaModels.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = m.name;
+        sel.appendChild(opt);
+      });
+      dot.className = 'model-status-dot';
+      txt.textContent = `${t('ollamaOnline')} — ${ollamaModels.length} মডেল`;
+
+      const saved = localStorage.getItem('krishi_model');
+      if (saved && ollamaModels.find(m => m.id === saved)) sel.value = saved;
+      else if (data.default_ollama) sel.value = data.default_ollama;
+    }
+
+    // Ollama Cloud models — dynamically populate from API if available
+    const ocModels = data.ollama_cloud_models || [];
+    const ocSel = document.getElementById('ollamaCloudModelSelect');
+    if (ocModels.length > 0) {
+      ocSel.innerHTML = '';
+      ocModels.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = `${m.name} — ${m.description}`;
+        ocSel.appendChild(opt);
+      });
+    }
+
+    onModelChange();
+
+  } catch(e) {
+    dot.className = 'model-status-dot offline';
+    txt.textContent = t('ollamaOffline');
+    sel.innerHTML = `<option value="">${t('ollamaOffline')}</option>`;
+  }
+}
+
+function getSelectedModel() {
+  return {
+    provider: activeModelProvider,
+    model: activeModelName || null,
+  };
+}
+
+// ─────────────────────────────────────────
+// LANGUAGE
+// ─────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('krishi_lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.documentElement.lang = lang;
+  applyTranslations();
+  populateDropdowns();
+}
+
+function t(key) {
+  return T[currentLang][key] || T['bn'][key] || key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (T[currentLang][key]) el.textContent = T[currentLang][key];
+  });
+  document.querySelectorAll('[data-t-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-t-placeholder');
+    if (T[currentLang][key]) el.placeholder = T[currentLang][key];
+  });
+}
+
+function populateDropdowns() {
+  const district = document.getElementById('districtSelect');
+  const current_d = district.value;
+  district.innerHTML = `<option value="">${t('districtPlaceholder')}</option>`;
+  T[currentLang].districts.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = d;
+    district.appendChild(opt);
+  });
+  if (current_d) district.value = current_d;
+
+  const crop = document.getElementById('cropSelect');
+  const current_c = crop.value;
+  crop.innerHTML = `<option value="">${t('cropPlaceholder')}</option>`;
+  T[currentLang].crops.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = c;
+    crop.appendChild(opt);
+  });
+  // "অন্য ফসল লিখুন" option সবসময় শেষে থাকবে
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__';
+  customOpt.textContent = currentLang === 'bn' ? '✏️ অন্য ফসল লিখুন...' : '✏️ Type other crop...';
+  crop.appendChild(customOpt);
+  if (current_c && current_c !== '__custom__') crop.value = current_c;
+
+  const season = document.getElementById('seasonSelect');
+  season.innerHTML = `<option value="">${t('seasonPlaceholder')}</option>`;
+  T[currentLang].seasons.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    season.appendChild(opt);
+  });
+}
+
+// ─────────────────────────────────────────
+// IMAGE HANDLING
+// ─────────────────────────────────────────
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (file) processImage(file);
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+  document.getElementById('uploadZone').classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processImage(file);
+}
+
+function processImage(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentImage = e.target.result;
+    document.getElementById('previewImg').src = currentImage;
+    document.getElementById('imagePreview').style.display = 'block';
+    document.getElementById('uploadZone').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeImage() {
+  currentImage = null;
+  document.getElementById('imagePreview').style.display = 'none';
+  document.getElementById('uploadZone').style.display = 'block';
+  document.getElementById('fileInput').value = '';
+}
+
+// ─────────────────────────────────────────
+// VALIDATION
+// ─────────────────────────────────────────
+function clearFieldError(fieldId, errorId) {
+  const field = document.getElementById(fieldId);
+  const err   = document.getElementById(errorId);
+  if (field) field.classList.remove('field-error');
+  if (err)   err.style.display = 'none';
+}
+
+function showFieldError(fieldId, errorId) {
+  const field = document.getElementById(fieldId);
+  const err   = document.getElementById(errorId);
+  if (field) {
+    field.classList.add('field-error');
+    // Auto-clear on change/input
+    const evtName = field.tagName === 'SELECT' ? 'change' : 'input';
+    field.addEventListener(evtName, () => clearFieldError(fieldId, errorId), { once: true });
+  }
+  if (err) err.style.display = 'flex';
+}
+
+function validateAnalyzeForm() {
+  const question    = document.getElementById('questionInput').value.trim();
+  const cropSel     = document.getElementById('cropSelect').value;
+  const cropCustom  = document.getElementById('cropCustomInput').value.trim();
+  // __custom__ সিলেক্ট হলে custom input এর মান নাও, নইলে select এর মান
+  const crop        = cropSel === '__custom__' ? cropCustom : cropSel;
+
+  let valid = true;
+
+  // ফসল mandatory
+  if (!crop) {
+    showFieldError('cropSelect', 'cropError');
+    // custom input দেখা যাচ্ছে কিন্তু খালি — সেখানে focus দাও
+    if (cropSel === '__custom__') {
+      document.getElementById('cropCustomInput').focus();
+    } else {
+      document.getElementById('cropSelect').focus();
+    }
+    valid = false;
+  } else {
+    clearFieldError('cropSelect', 'cropError');
+  }
+
+  // প্রশ্ন mandatory — শুধু ছবি না থাকলে
+  const hasImage = !!currentImage;
+  if (!question && !hasImage) {
+    showFieldError('questionInput', 'questionError');
+    if (crop) document.getElementById('questionInput').focus();
+    valid = false;
+  } else {
+    clearFieldError('questionInput', 'questionError');
+  }
+
+  return valid;
+}
+
+// ─────────────────────────────────────────
+// ANALYSIS
+// ─────────────────────────────────────────
+async function runAnalysis() {
+  if (!validateAnalyzeForm()) return;
+
+  const district = document.getElementById('districtSelect').value;
+  const cropSel  = document.getElementById('cropSelect').value;
+  const cropCustom = document.getElementById('cropCustomInput').value.trim();
+  const crop     = cropSel === '__custom__' ? cropCustom : cropSel;
+  const season   = document.getElementById('seasonSelect').value;
+  const question = document.getElementById('questionInput').value.trim();
+
+  setLoading(true);
+
+  try {
+    const { provider, model } = getSelectedModel();
+    const payload = {
+      image_base64: currentImage ? currentImage.split(',')[1] : null,
+      question: question || (currentLang === 'bn' ? `আমার ${crop || 'ফসলে'} কী সমস্যা?` : `What's wrong with my ${crop || 'crop'}?`),
+      district: district,
+      crop_type: crop,
+      season: season,
+      language: currentLang,
+      model_provider: provider,
+      model_name: model,
+    };
+
+    const res = await fetch('/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const detail = errBody.detail || res.statusText || 'API error';
+      showToast('❌ ' + detail, 5000);
+      setLoading(false);
+      return;
+    }
+    const data = await res.json();
+    showResults(data);
+
+    // Also fetch weather
+    if (district) {
+      try {
+        const wRes = await fetch(`/weather/${encodeURIComponent(district)}?language=${currentLang}`);
+        if (wRes.ok) {
+          const wData = await wRes.json();
+          // farming_advice array check
+          if (wData.farming_advice && !Array.isArray(wData.farming_advice)) {
+            wData.farming_advice = [wData.farming_advice];
+          }
+          showWeather(wData);
+        } else {
+          showWeather(getMockWeather(district));
+        }
+      } catch(e) {
+        showWeather(getMockWeather(district));
+      }
+    }
+
+  } catch (err) {
+    // API error details দেখাও
+    let errMsg = '';
+    try {
+      const errData = await err.response?.json?.();
+      errMsg = errData?.detail || err.message || '';
+    } catch(e) { errMsg = err.message || ''; }
+
+    if (errMsg && errMsg !== 'API error') {
+      showToast('❌ ' + errMsg, 5000);
+    } else {
+      // DEMO MODE
+      showResults(getMockData());
+      if (district) showWeather(getMockWeather(district));
+      showToast('ℹ️ ' + (currentLang === 'bn' ? 'ডেমো মোড — Backend সংযুক্ত নেই' : 'Demo mode — Backend not connected'));
+    }
+  }
+
+  setLoading(false);
+}
+
+function getMockData() {
+  if (currentLang === 'bn') {
+    return {
+      disease_name: 'ধানের ব্লাস্ট রোগ',
+      severity: 'medium',
+      confidence: 84,
+      treatment: 'ট্রাইসাইক্লাজোল ৭৫% WP (ব্যাভিস্টিন) — ১ গ্রাম প্রতি লিটার পানিতে মিশিয়ে স্প্রে করুন। ৭ দিন পর আবার দিন।',
+      fertilizer: 'ইউরিয়া ১২ কেজি/বিঘা — শেষ কিস্তিতে। পটাশ সার ৮ কেজি/বিঘা যোগ করুন রোগ প্রতিরোধ বাড়াতে।',
+      weather_advice: 'আজ আর্দ্রতা বেশি, ছত্রাক ছড়ানোর ঝুঁকি আছে। ভোরে স্প্রে করুন, রোদ ওঠার আগে।'
+    };
+  }
+  return {
+    disease_name: 'Rice Blast Disease',
+    severity: 'medium',
+    confidence: 84,
+    treatment: 'Tricyclazole 75% WP (Bavistan) — mix 1g per liter of water and spray. Repeat after 7 days.',
+    fertilizer: 'Urea 12 kg/bigha — last split dose. Add Potash 8 kg/bigha to boost disease resistance.',
+    weather_advice: 'High humidity today increases fungal spread risk. Spray early morning before sun rises.'
+  };
+}
+
+function getMockWeather(district) {
+  return {
+    temperature: 31,
+    humidity: 76,
+    rain_probability: 45,
+    weather_icon: '⛅',
+    description: currentLang === 'bn' ? 'আংশিক মেঘলা' : 'Partly cloudy',
+    farming_advice: currentLang === 'bn'
+      ? 'বৃষ্টির সম্ভাবনা ৪৫%। সেচ দেওয়ার প্রয়োজন নেই আজ। বিকেলে চাষ করুন।'
+      : 'Rain probability 45%. No irrigation needed today. Best to work fields in the afternoon.'
+  };
+}
+
+function renderMd(text) {
+  if (!text || text === '—') return '—';
+  return typeof marked !== 'undefined' ? marked.parse(text) : escHtml(text);
+}
+
+function showResults(data) {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'block';
+
+  document.getElementById('diseaseName').textContent = data.disease_name || '—';
+  document.getElementById('treatmentText').innerHTML = renderMd(data.treatment);
+  document.getElementById('fertText').innerHTML = renderMd(data.fertilizer);
+  document.getElementById('weatherText').innerHTML = renderMd(data.weather_advice);
+
+  // Severity badge
+  const sev = data.severity || 'medium';
+  const sevEl = document.getElementById('severityBadge');
+  const sevMap = {
+    high: ['severity-high', '🔴 ' + t('severityHigh')],
+    medium: ['severity-medium', '🟡 ' + t('severityMed')],
+    low: ['severity-low', '🟢 ' + t('severityLow')]
+  };
+  const [cls, label] = sevMap[sev] || sevMap.medium;
+  sevEl.innerHTML = `<span class="severity-badge ${cls}">${label}</span>`;
+
+  // Confidence
+  const conf = data.confidence || 0;
+  document.getElementById('confFill').style.width = conf + '%';
+  document.getElementById('confLabel').textContent = `${t('confidence')}: ${conf}%`;
+
+  // Mark cards as having data
+  ['diseaseCard','treatmentCard','fertCard','weatherCard'].forEach(id => {
+    document.getElementById(id).classList.add('has-data');
+  });
+}
+
+function showWeather(data) {
+  const w = document.getElementById('weatherWidget');
+  w.style.display = 'grid';
+
+  // weather_icon: backend থেকে আসে না, condition দিয়ে icon বাছাই করো
+  const icon = getWeatherIcon(data.condition || data.weather_icon || '');
+  document.getElementById('wIcon').textContent = icon;
+
+  document.getElementById('wTemp').textContent = data.temperature ? `${data.temperature}°C` : '—°C';
+
+  // Backend পাঠায় 'condition', mock পাঠায় 'description'
+  document.getElementById('wDesc').textContent = data.condition || data.description || '';
+
+  document.getElementById('wHumidity').textContent = data.humidity != null ? data.humidity : '—';
+  document.getElementById('wRain').textContent = data.rain_probability != null ? data.rain_probability : '—';
+
+  // farming_advice: backend থেকে array আসে, mock থেকে string আসে
+  const advice = data.farming_advice;
+  let adviceText = '';
+  if (Array.isArray(advice)) {
+    adviceText = advice.join('\n');
+  } else if (typeof advice === 'string') {
+    adviceText = advice;
+  }
+  document.getElementById('wAdvice').textContent = adviceText || '—';
+}
+
+function getWeatherIcon(condition) {
+  if (!condition) return '🌤️';
+  const c = condition.toLowerCase();
+  if (c.includes('thunder') || c.includes('বজ্র')) return '⛈️';
+  if (c.includes('heavy rain') || c.includes('ভারী বৃষ্টি')) return '🌧️';
+  if (c.includes('rain') || c.includes('drizzle') || c.includes('বৃষ্টি') || c.includes('গুঁড়ি')) return '🌦️';
+  if (c.includes('snow') || c.includes('তুষার')) return '❄️';
+  if (c.includes('fog') || c.includes('কুয়াশা')) return '🌫️';
+  if (c.includes('overcast') || c.includes('সম্পূর্ণ মেঘ')) return '☁️';
+  if (c.includes('cloud') || c.includes('মেঘ')) return '⛅';
+  if (c.includes('clear') || c.includes('পরিষ্কার')) return '☀️';
+  return '🌤️';
+}
+
+function setLoading(on) {
+  const overlay = document.getElementById('resultsLoading');
+  const btn = document.getElementById('analyzeBtn');
+  const spinner = document.getElementById('btnSpinner');
+  overlay.classList.toggle('show', on);
+  btn.disabled = on;
+  spinner.style.display = on ? 'block' : 'none';
+}
+
+// ─────────────────────────────────────────
+// CHAT
+// ─────────────────────────────────────────
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg   = input.value.trim();
+
+  if (!msg) {
+    // খালি হলে input shake করবে
+    input.classList.add('field-error');
+    input.focus();
+    input.addEventListener('input', () => input.classList.remove('field-error'), { once: true });
+    return;
+  }
+
+  input.value = '';
+  addChatMsg(msg, 'user');
+  chatHistory.push({ role: 'user', content: msg });
+
+  const typing = document.getElementById('typingIndicator');
+  typing.style.display = 'flex';
+  const chat = document.getElementById('chatMessages');
+  chat.scrollTop = chat.scrollHeight;
+
+  try {
+    const { provider, model } = getSelectedModel();
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: msg,
+        district: document.getElementById('districtSelect').value,
+        language: currentLang,
+        history: chatHistory.slice(-6),
+        model_provider: provider,
+        model_name: model,
+      })
+    });
+    const data = await res.json();
+    typing.style.display = 'none';
+    const reply = data.response;
+    chatHistory.push({ role: 'assistant', content: reply });
+    addChatMsg(reply, 'ai');
+  } catch(e) {
+    typing.style.display = 'none';
+    const fallback = currentLang === 'bn'
+      ? 'আপনার প্রশ্নটি পেয়েছি। Backend চালু হলে বিস্তারিত উত্তর দিতে পারব। Ollama চালু আছে কিনা দেখুন: ollama serve'
+      : 'Got your question! Once the backend is running, I can give detailed answers. Check if Ollama is running: ollama serve';
+    addChatMsg(fallback, 'ai');
+  }
+}
+
+function addChatMsg(text, role) {
+  const chat = document.getElementById('chatMessages');
+  const typing = document.getElementById('typingIndicator');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  if (role === 'ai') {
+    // Markdown render করো (marked.js)
+    const rendered = typeof marked !== 'undefined'
+      ? marked.parse(text)
+      : escHtml(text);
+    div.innerHTML = `<div class="ai-label">${currentLang === 'bn' ? 'কৃষি AI' : 'Agriculture AI'}</div><div class="md-content">${rendered}</div>`;
+  } else {
+    div.textContent = text;
+  }
+  chat.insertBefore(div, typing);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function handleCropSelect(sel) {
+  const customInput = document.getElementById('cropCustomInput');
+  if (sel.value === '__custom__') {
+    customInput.style.display = 'block';
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.value = '';
+  }
+}
+
+function syncCustomCrop(val) {
+  // custom input এ লেখা থাকলে error clear করো
+  if (val.trim()) {
+    const err = document.getElementById('cropError');
+    if (err) err.style.display = 'none';
+    const sel = document.getElementById('cropSelect');
+    if (sel) sel.style.border = '';
+  }
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
+function showToast(msg, dur = 3500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Set active lang button
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const activeLangBtn = document.querySelector(`.lang-btn[onclick="setLang('${currentLang}')"]`);
+  if (activeLangBtn) activeLangBtn.classList.add('active');
+
+  populateDropdowns();
+  applyTranslations();
+
+  // Restore saved provider tab
+  if (activeModelProvider === 'ollama_cloud') {
+    switchModelTab('ollama_cloud');
+  }
+
+  // Load Ollama models from backend
+  loadModels();
+
+  // Health check
+  fetch('/health')
+    .then(r => r.json())
+    .then(d => {
+      // ollama/db status handled by loadModels
+    })
+    .catch(() => {
+      document.getElementById('headerStatusDot').style.background = '#f87171';
+      document.getElementById('headerStatusText').textContent =
+        currentLang === 'bn' ? '❌ Backend বন্ধ' : '❌ Backend offline';
+    });
+});
+</script>
+</body>
+</html>
