@@ -1,0 +1,185 @@
+Qus-1: AI Engineering Overview: What is the core difference between Agentic AI and Generative AI? Explain by mentioning a real-world Business Use Case.
+
+Ans-1:
+
+The core difference between Agentic AI and Generative AI is:
+
+#Generative AI is designed to generate content such as text, images, code, audio, or video based on user prompts. It mainly focuses on producing responses or creative outputs.
+
+#Agentic AI, on the other hand, is capable of autonomous decision-making and task execution. It can plan actions, use tools, remember context, and complete multi-step goals with minimal human intervention.
+
+Real-World Business Use Case
+Generative AI Example
+
+A company uses an AI chatbot for customer service:
+
+Customers ask questions,
+The AI generates human-like responses,
+It helps answer FAQs and basic support requests.
+
+Example:
+An e-commerce chatbot writes product descriptions or replies to customer queries.
+
+Agentic AI Example
+
+An AI-powered customer support agent in a bank:
+
+Understands customer complaints,
+Accesses internal databases,
+Verifies account information,
+Creates support tickets,
+Initiates refunds or transactions,
+Sends confirmation emails automatically.
+
+Here, the AI is not only generating responses but also taking actions and managing workflows.
+
+
+
+Qus-2: Environment Setup: Discuss the performance differences between CPU and GPU for Local AI Development. What is the necessity of using Docker in your development workflow?
+
+Ans-2: 
+CPU vs GPU Performance for Local AI Development
+CPU (Central Processing Unit)
+Good for general-purpose computing.
+Handles sequential processing efficiently.
+Slower for AI model training and inference.
+Suitable for lightweight AI tasks.
+GPU (Graphics Processing Unit)
+Designed for parallel computation.
+Can process thousands of operations simultaneously.
+Much faster for deep learning, LLM inference, and embeddings.
+Essential for running large AI models locally.
+
+Performance Difference
+
+For Local LLMs:
+
+CPU inference may take several seconds per response.
+GPU inference significantly reduces latency and improves throughput.
+Necessity of Docker in AI Development Workflow
+
+Docker provides:
+
+Environment Consistency
+Same dependencies across all systems.
+Dependency Isolation
+Prevents conflicts between Python packages and libraries.
+Portability
+Applications run identically on development, testing, and production systems.
+Easy Deployment
+Simplifies scaling and cloud deployment.
+Reproducibility
+Teams can recreate the exact AI environment quickly.
+
+Qus-3:LLMs & Optimization: What are "Quantization Methods" in the context of running Local LLMs? How do they assist in Latency Optimization and Memory Management?
+
+Ans-3:
+Quantization is the process of reducing the precision of model weights from:
+
+FP32 → FP16 → INT8 → INT4, etc.
+
+This reduces model size and computation requirements.
+
+Common Quantization Types
+8-bit Quantization
+4-bit Quantization
+GPTQ
+AWQ
+GGUF Quantization
+Benefits for Latency Optimization
+
+Quantized models:
+
+Require fewer computations,
+Load faster,
+Generate responses more quickly,
+Improve inference speed on local machines.
+Benefits for Memory Management
+
+Quantization:
+
+Reduces VRAM and RAM usage,
+Allows larger models to run on consumer GPUs,
+Makes local deployment possible on limited hardware.
+
+Example:
+A 13B model may require:
+
+~26GB in FP16,
+~8GB in 4-bit quantized format.
+
+
+Qus-4:Prompt Engineering: Why are System Prompt Design and Guardrails & Safety critical for production-level applications?
+
+Ans-4:
+Importance of System Prompt Design
+
+System prompts define:
+
+AI behavior,
+Tone,
+Rules,
+Task boundaries,
+Response structure.
+
+They ensure the model behaves consistently in production systems.
+Without good system prompts:
+
+Responses become inconsistent,
+Hallucinations increase,
+AI may ignore business requirements.
+
+Importance of Guardrails & Safety
+
+Guardrails prevent:
+
+Harmful outputs,
+Data leakage,
+Prompt injection attacks,
+Unsafe or biased responses.
+Production-Level Importance
+
+Guardrails help:
+
+Maintain compliance,
+Protect user privacy,
+Improve reliability,
+Ensure ethical AI usage.
+
+
+Qus-5:RAG Architecture: How does the RAG (Retrieval-Augmented Generation) architecture work? Briefly describe the roles of Document Processing and Chunking Strategy within this system.
+
+Ans-5:
+
+RAG (Retrieval-Augmented Generation) combines:
+
+Information Retrieval
+Large Language Models
+Workflow
+User asks a question.
+System searches relevant documents from a vector database.
+Retrieved context is added to the prompt.
+LLM generates an informed response using retrieved knowledge.
+Role of Document Processing
+
+Document processing includes:
+
+Cleaning text,
+Extracting content,
+Formatting data,
+Removing noise.
+
+It prepares documents for embedding and retrieval.
+
+Role of Chunking Strategy
+
+Chunking divides documents into smaller pieces.
+
+Good chunking:
+
+Improves retrieval accuracy,
+Preserves semantic meaning,
+Reduces irrelevant context.
+
+Efficient chunking improves final answer quality.
+
